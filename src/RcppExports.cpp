@@ -6,13 +6,21 @@
 
 using namespace Rcpp;
 
-// rcpp_hello_world
-Rcpp::List rcpp_hello_world();
-RcppExport SEXP nnetwork_rcpp_hello_world() {
+// nnetwork
+Rcpp::List nnetwork(arma::mat const& X, arma::mat const& Y, arma::mat& W1, arma::mat& W2, arma::mat& b1, arma::mat& b2, int n_iter, double learningrate);
+RcppExport SEXP nnetwork_nnetwork(SEXP XSEXP, SEXP YSEXP, SEXP W1SEXP, SEXP W2SEXP, SEXP b1SEXP, SEXP b2SEXP, SEXP n_iterSEXP, SEXP learningrateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello_world());
+    Rcpp::traits::input_parameter< arma::mat const& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat const& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type W1(W1SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type W2(W2SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type b1(b1SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type b2(b2SEXP);
+    Rcpp::traits::input_parameter< int >::type n_iter(n_iterSEXP);
+    Rcpp::traits::input_parameter< double >::type learningrate(learningrateSEXP);
+    rcpp_result_gen = Rcpp::wrap(nnetwork(X, Y, W1, W2, b1, b2, n_iter, learningrate));
     return rcpp_result_gen;
 END_RCPP
 }
