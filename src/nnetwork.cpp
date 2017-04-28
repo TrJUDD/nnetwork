@@ -1,8 +1,15 @@
-
 #include <RcppArmadillo.h>
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
+
+// Select random submatrix (example)
+arma::mat random_sub_mat(arma::mat const &A){
+  Rcpp::IntegerVector x = (Rcpp::seq_len(A.n_rows) - 1) ;
+  Rcpp::IntegerVector y = Rcpp::sample(x, 10, FALSE) ;
+  arma::uvec z = Rcpp::as<arma::uvec>(y) ;
+  return A.rows(z) ;
+}
 
 
 // Used functions, matrix form
@@ -22,7 +29,7 @@ double l2norm(arma::mat const &y1, arma::mat const &y2) {
 
 
 arma::mat l2norm_prime(arma::mat const &y1, arma::mat const &y2) {
-  return 2 * (y1 - y2) ;
+  return 2 * (y1 - y2) / y1.n_elem ;
 }
 
 
@@ -67,20 +74,25 @@ void upgrad (arma::mat &W1, arma::mat &W2,
 
 
 // Training neural network
-// [[Rcpp::export]]
 Rcpp::List nnetwork(arma::mat const &X, arma::mat const &Y,
                     arma::mat &W1, arma::mat &W2,
                     arma::mat &b1, arma::mat &b2,
-                    int n_iter, double learningrate) {
+                    int n_iter, double learningrate,
+                    int batch_size) {
   arma::mat U ;
   arma::mat pred ;
   arma::mat dW1 ;
   arma::mat dW2 ;
   arma::mat db1 ;
   arma::mat db2 ;
+  Rcpp::IntegerVector X_rows = (Rcpp::seq_len(X.n_rows) - 1) ;
+  Rcpp::IntegerVector X_shuffle ;
+  arma::uvec X_shuf ;
   for (int i =0; i<n_iter; ++i) {
-    fprop(X, W1, W2, b1, b2, U, pred) ;
-    bprop(X, Y, U, pred, W1, W2, b1, b2,
+    X_shuffle = Rcpp::sample(X_rows, batch_size, FALSE) ;
+    X_shuf = Rcpp::as<arma::uvec>(X_shuffle) ;
+    fprop(X.rows(X_shuf), W1, W2, b1, b2, U, pred) ;
+    bprop(X.rows(X_shuf), Y.rows(X_shuf), U, pred, W1, W2, b1, b2,
           dW1, dW2, db1, db2) ;
     upgrad(W1, W2, b1, b2, dW1, dW2, db1, db2, learningrate) ;
   }

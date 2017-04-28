@@ -1,11 +1,14 @@
 Package: nnetwork
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
-Version: 1.0
-Date: 2017-04-15
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one or more full sentences.
+Title: Neural networks implementation through Rcpp and RcppArmadillo
+Version: 0.3
+Date: 2017-04-28
+Author: JUDD Tristan
+Maintainer: JUDD Tristan <tristan.judd@ensae.fr>
+Description: Training of neural networks using backpropagation. Methods for adding iterations and easy prediction
+    for nnetwork object are implemented.
 License: GPL (>= 2)
+Depends: R (>= 3.0.0)
 Imports: Rcpp (>= 0.12.10)
 LinkingTo: Rcpp, RcppArmadillo
+RoxygenNote: 6.0.1
